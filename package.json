@@ -1,0 +1,30 @@
+{
+  "name": "sbanken-prometheus",
+  "version": "1.0.0",
+  "description": "Prometheus exporter for SBanken",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Danielv123/sbanken-prometheus.git"
+  },
+  "keywords": [
+    "prometheus",
+    "sbanken",
+    "skandiabanken",
+    "api"
+  ],
+  "author": "Daniel Vestøl",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Danielv123/sbanken-prometheus/issues"
+  },
+  "homepage": "https://github.com/Danielv123/sbanken-prometheus#readme",
+  "dependencies": {
+    "btoa": "^1.1.2",
+    "needle": "^2.2.0",
+    "prom-client": "^11.0.0"
+  }
+}
