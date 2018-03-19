@@ -5,6 +5,7 @@ const http = require("http");
 const config = require("./config");
 const getAccessToken = require("./lib/getAccessToken");
 const getCustomerDetails = require("./lib/getCustomerDetails");
+const util = require("./lib/util");
 
 // set up logging software
 const prometheusPrefix = "sbanken_";
@@ -19,7 +20,7 @@ let promAccountBalance = new Prometheus.Gauge({
 async function populateAccountGauges(){
 	let accountDetails = await getAccountDetails();
 	console.log(accountDetails)
-	accountDetails.forEach(async account => {
+	await util.asyncForEach(accountDetails, async account => {
 		let customerName = await useridToName(account.customerId);
 		let ownerName = await useridToName(account.ownerCustomerId);
 		console.log(customerName)
@@ -91,6 +92,6 @@ async function getAllTransactions(){
 	});
 	return transactionList;
 }
-getAllTransactions().then(transactions => {
-	console.log(JSON.stringify(transactions, null, 4));
-}).catch(e => console.log(e))
+// getAllTransactions().then(transactions => {
+	// console.log(JSON.stringify(transactions, null, 4));
+// }).catch(e => console.log(e))
