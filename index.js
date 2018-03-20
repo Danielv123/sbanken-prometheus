@@ -7,6 +7,28 @@ const getAccessToken = require("./lib/getAccessToken");
 const getCustomerDetails = require("./lib/getCustomerDetails");
 const util = require("./lib/util");
 
+// use env variables if config is not set
+if(config.apiKey.includes("*") || !config.apiKey){
+	if(process.env.apiKey){
+		config.apiKey = process.env.apiKey;
+	} else {
+		throw new Error("No API key specified as config.js value/environment variable 'apiKey'");
+	}
+}
+if(config.secret.includes("*") || !config.secret){
+	if(process.env.secret){
+		config.secret = process.env.secret;
+	} else {
+		throw new Error("No API secret (password) specified as config.js value/environment variable 'secret'");
+	}
+}
+if(config.userID.includes("*") || !config.userID){
+	if(process.env.userID){
+		config.userID = process.env.userID;
+	} else {
+		throw new Error("No SSN (personnummer) specified as config.js value/environment variable 'userID'");
+	}
+}
 // set up logging software
 const prometheusPrefix = "sbanken_";
 const Prometheus = require('prom-client');
@@ -21,8 +43,8 @@ async function populateAccountGauges(){
 	let accountDetails = await getAccountDetails();
 	console.log(accountDetails)
 	await util.asyncForEach(accountDetails, async account => {
-		let customerName = await useridToName(account.customerId);
-		let ownerName = await useridToName(account.ownerCustomerId);
+		let customerName = util.normalizeCharacters(await useridToName(account.customerId));
+		let ownerName = util.normalizeCharacters(await useridToName(account.ownerCustomerId));
 		console.log(customerName)
 		promAccountBalance
 		.labels(customerName, account.accountNumber, ownerName, account.name, account.accountType)
